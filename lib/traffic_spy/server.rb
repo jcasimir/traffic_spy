@@ -3,10 +3,7 @@ module TrafficSpy
     set :views, 'lib/views'
 
     post '/sources' do
-      #response_for(SourcesController.create(params))
-      response = SourcesController.create(params)
-      status response.status
-      body   response.body      
+      response_for(SourcesController.create(params))
     end
 
     get '/' do
@@ -17,10 +14,10 @@ module TrafficSpy
       erb :error
     end
 
-    # def response_for(response)
-    #   status response.status
-    #   body   response.body
-    # end
+    def response_for(response)
+      status response.status
+      body   response.body
+    end
   end
 
 end
