@@ -6,6 +6,10 @@ module TrafficSpy
       response_for(SourcesController.create(params))
     end
 
+    post '/sources/:application/data' do
+      response_for(DataController.create(params))
+    end
+
     get '/' do
       erb :index
     end

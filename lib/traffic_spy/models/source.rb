@@ -17,7 +17,7 @@ module TrafficSpy
         @errors << ValidationError.new(:category => :missing_parameter, 
                                        :message => "Missing 'rootUrl' parameter")
       end
-      if Source.identifier_exists?(identifier)
+      if Source.registered?(identifier)
         @errors << ValidationError.new(:category => :repeated_identifier,
                                        :message  => "Sorry, indentifier '#{identifier}' has already been taken")
       end
@@ -26,6 +26,7 @@ module TrafficSpy
 
     def save
       Source.all << self
+      self
     end
 
     def self.all
@@ -36,12 +37,16 @@ module TrafficSpy
       all.count
     end
 
-    def self.identifier_exists?(identifier)
+    def self.destroy_all
+      @sources = []
+    end
+
+    def self.registered?(identifier)
       all.any?{|source| source.identifier == identifier}
     end
 
-    def self.destroy_all
-      @sources = []
+    def self.create(params)
+      new(params).save
     end
   end
 end
