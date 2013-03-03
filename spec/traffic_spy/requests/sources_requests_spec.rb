@@ -9,6 +9,7 @@ describe "/sources" do
 
   before(:each) do
     TrafficSpy::Source.destroy_all
+    TrafficSpy::Request.destroy_all
   end
 
   describe "application registration at /sources" do
@@ -37,6 +38,12 @@ describe "/sources" do
       it "accepts data" do
         post "/sources/jumpstartlab/data", {:payload => Payload.sample}
         expect(last_response.status).to eq 200
+      end
+
+      it "rejects duplicated data" do
+        2.times { post "/sources/jumpstartlab/data", {:payload => Payload.sample} }
+        expect(last_response.status).to eq 403
+        expect(last_response.body.downcase).to include("payload is a duplicate")
       end
     end
 

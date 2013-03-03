@@ -9,7 +9,7 @@ module TrafficSpy
         it "returns 403 and a message" do
           result = DataController.create(params)
           expect(result.status).to eq 403
-          expect(result.body.downcase).to include("application not registered")
+          expect(result.body.downcase).to include("not registered")
         end
       end
 
@@ -33,7 +33,18 @@ module TrafficSpy
           it "returns 400 and a message" do
             result = DataController.create(params)
             expect(result.status).to eq 400
-            expect(result.body.downcase).to include("missing payload")
+            expect(result.body.downcase).to include("payload missing")
+          end
+        end
+
+        context "with a duplicate payload" do
+          let(:params){ { :payload => Payload.sample, :application => application } }
+
+          it "returns 403 and a message" do
+            valid   = DataController.create(params)
+            invalid = DataController.create(params)
+            expect(invalid.status).to eq 403
+            expect(invalid.body.downcase).to include("duplicate")
           end
         end
       end
