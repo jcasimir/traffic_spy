@@ -8,6 +8,8 @@ group :development do
   gem 'rspec'
   gem 'guard-rspec'
   gem 'rb-fsevent', '~> 0.9'
+  gem 'capybara'
+  gem 'rack-test', require: "rack/test"
 end
 
 group :evaluations do
