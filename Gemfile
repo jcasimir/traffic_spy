@@ -7,6 +7,7 @@ group :development do
   gem 'shotgun'
   gem 'rspec'
   gem 'guard-rspec'
+  gem 'guard-livereload'
   gem 'rb-fsevent', '~> 0.9'
   gem 'capybara'
   gem 'rack-test', require: "rack/test"
