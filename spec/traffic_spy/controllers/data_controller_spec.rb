@@ -21,6 +21,10 @@ module TrafficSpy
         context "with valid parameters" do
           let(:params){ { :payload => Payload.sample, :application => application } }
 
+          before(:each) do
+            Request.destroy_all
+          end
+
           it "creates a request record" do
             expect{ DataController.create(params) }.to change{ Request.count }.by(1)
           end
