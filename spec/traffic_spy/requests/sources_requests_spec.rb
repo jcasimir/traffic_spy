@@ -17,7 +17,7 @@ describe "/sources" do
       it "registers the application" do        
         post "/sources", {:identifier => 'jumpstartlab', :rootUrl => 'http://jumpstartlab.com'}
         expect(last_response).to be_ok
-        expect(last_response.body.downcase).to include("created 'jumpstartlab' source for url 'http://jumpstartlab.com'")
+        expect(last_response.body.downcase).to (include("created") && include("jumpstartlab"))
       end
     end
 
@@ -25,6 +25,13 @@ describe "/sources" do
       it "returns an error" do
         2.times { post "/sources", {:identifier => 'jumpstartlab', :rootUrl => 'http://jumpstartlab.com'} }
         expect(last_response.status).to eq 403
+      end
+    end
+
+    context "when missing the identifier" do
+      it "returns an error" do
+        post "/sources", {:rootUrl => 'http://jumpstartlab.com'}
+        expect(last_response.status).to eq 400
       end
     end
   end

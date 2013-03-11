@@ -8,45 +8,75 @@ module TrafficSpy
     end
 
     def valid?
-      @errors = []
-      if !identifier
-        @errors << ValidationError.new(:category => :missing_parameter, 
-                                       :message => "Missing 'identifier' parameter")
-      end
-      if !root_url
-        @errors << ValidationError.new(:category => :missing_parameter, 
-                                       :message => "Missing 'rootUrl' parameter")
-      end
-      if Source.registered?(identifier)
-        @errors << ValidationError.new(:category => :repeated_identifier,
-                                       :message  => "Sorry, indentifier '#{identifier}' has already been taken")
-      end
-      @errors.empty?
+      (identifier && root_url) && !Source.exists?(identifier)
     end
 
     def save
       Source.all << self
-      self
+      return self
     end
 
-    def self.all
-      @sources ||= []
+    def self.exists?(identifier)
+      all.any?{|source| source.identifier == identifier}
+    end
+
+    def self.destroy_all
+      all.clear
     end
 
     def self.count
       all.count
     end
 
-    def self.destroy_all
-      @sources = []
+    def self.all
+      @sources ||= []
     end
 
-    def self.registered?(identifier)
-      all.any?{|source| source.identifier == identifier}
-    end
 
-    def self.create(params)
-      new(params).save
-    end
+
+
+
+
+    # def valid?
+    #   @errors = []
+    #   if !identifier
+    #     @errors << ValidationError.new(:category => :missing_parameter, 
+    #                                    :message => "Missing 'identifier' parameter")
+    #   end
+    #   if !root_url
+    #     @errors << ValidationError.new(:category => :missing_parameter, 
+    #                                    :message => "Missing 'rootUrl' parameter")
+    #   end
+    #   if Source.registered?(identifier)
+    #     @errors << ValidationError.new(:category => :repeated_identifier,
+    #                                    :message  => "Sorry, indentifier '#{identifier}' has already been taken")
+    #   end
+    #   @errors.empty?
+    # end
+
+    # def save
+    #   Source.all << self
+    #   self
+    # end
+
+    # def self.all
+    #   @sources ||= []
+    # end
+
+    # def self.count
+    #   all.count
+    # end
+
+    # def self.destroy_all
+    #   @sources = []
+    # end
+
+    # def self.registered?(identifier)
+    #   all.any?{|source| source.identifier == identifier}
+    # end
+
+    # def self.create(params)
+    #   new(params).save
+    # end
   end
 end

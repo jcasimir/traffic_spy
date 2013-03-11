@@ -1,18 +1,42 @@
 module TrafficSpy
   class SourcesController < Sinatra::Application
     def self.create(params)
-      source = Source.new(:identifier => params[:identifier],
-                          :root_url   => params[:rootUrl])
+      #Response.new(:body => "created '#{params[:identifier]}' source for url 'http://jumpstartlab.com'")
+
+      source = Source.new(:identifier => params[:identifier], :root_url => params[:rootUrl])
       if source.valid?
         source.save
-        status = 200
-        body = "OK - created '#{params[:identifier]}' source for URL '#{params[:rootUrl]}'"
+        Response.new(:body => "created '#{source.identifier}' source for url '#{source.root_url}'", :status => 200)
       else
-        status = status_for(source.errors.first.category)
-        body = source.errors.collect{|e| e.message}.join(", ")
+        Response.new(:body => "that won't work", :status => 403)
       end
 
-      Response.new(:status => status, :body => body)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      # source = Source.new(:identifier => params[:identifier],
+      #                     :root_url   => params[:rootUrl])
+      # if source.valid?
+      #   source.save
+      #   status = 200
+      #   body = "OK - created '#{params[:identifier]}' source for URL '#{params[:rootUrl]}'"
+      # else
+      #   status = status_for(source.errors.first.category)
+      #   body = source.errors.collect{|e| e.message}.join(", ")
+      # end
+
+      # Response.new(:status => status, :body => body)
     end
 
   private
